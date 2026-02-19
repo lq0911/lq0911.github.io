@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 校园拼拼乐</title>
+    <style>
+         nav {
+            background-color: #2c3e50; /* 深蓝色背景 */
+            width: 100%; /* 占满整个宽度 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 增加阴影提升层次感 */
+        }
+
+        /* 导航链接容器，用于居中导航项 */
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto; /* 水平居中 */
+            display: flex; /* 横向排列链接 */
+        }
+
+        /* 导航链接样式 */
+        nav a {
+            color: white; /* 文字白色 */
+            text-decoration: none; /* 去掉下划线 */
+            padding: 15px 20px; /* 内边距，增加点击区域 */
+            display: inline-block; /* 让 padding 生效 */
+            transition: background-color 0.3s ease; /* 过渡效果，更丝滑 */
+        }
+
+        /* 鼠标悬停效果 */
+        nav a:hover {
+            background-color: #34495e; /* 悬停时加深背景色 */
+            color: #f1c40f; /* 文字变成浅黄色 */
+        }
+
+        /* 可选：当前页面链接的样式（比如首页） */
+        nav a.active {
+            background-color: #1abc9c;
+            color: white;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "PingFang SC", "微软雅黑", sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        /* 顶部导航 */
+        .navbar {
+            background: linear-gradient(90deg, #4a90e2, #63b3ed);
+            padding: 18px 0;
+            box-shadow: 0 2px 10px rgba(74, 144, 226, 0.2);
+        }
+        .navbar .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .navbar .logo {
+            width: 60px;
+            height: auto;
+        }
+        .navbar h1 {
+            color: white;
+            font-size: 1.8rem;
+        }
+        /* 主体容器 */
+        .container {
+            max-width: 1080px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        /* 标题区域 */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-title h2 {
+            font-size: 2.4rem;
+            color: #4e97d1;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h2::after {
+            content: "";
+            width: 50%;
+            height: 3px;
+            background: #f0ad4e;
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+        }
+        /* 文案内容区 */
+        .about-text {
+            background: white;
+            padding: 35px 45px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+        }
+        .about-text p {
+            margin-bottom: 22px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .about-text strong {
+            color: #4e97d1;
+            font-weight: 600;
+        }
+        /* 图片展示区 */
+        .image-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .image-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            transition: transform 0.3s ease;
+        }
+        .image-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .image-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            object-position: center;
+        }
+        .image-card .card-info {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.05rem;
+            color: #555;
+            font-weight: 500;
+        }
+        /* 底部标语栏 */
+        .slogan-box {
+            background: #e8f4fc;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #343a40;
+            font-weight: 600;
+            border-left: 6px solid #4e97d1;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="登录.html" class="active">首页</a>
+            <a href="封面.html">封面</a>
+            <a href="关于我们.html">关于我们</a>
+            <a href="拼拼乐.html">拼拼乐</a>
+        </div>
+    </nav>
+     <!-- 顶部导航 -->
+    <div class="navbar">
+        <div class="logo-area">
+            <img class="logo" src="logo.jpg" alt="校园拼拼乐logo">
+            <h1>校园拼拼乐</h1>
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <!-- 标题 -->
+        <div class="section-title">
+            <h2>关于我们</h2>
+        </div>
+
+        <!-- 文案区域 -->
+        <div class="about-text">
+            <p>校园拼拼乐，是专为武汉文理学院学子量身打造的一站式校园组队拼单平台。</p>
+            <p>在这里，校园拼拼乐致力于为每一位同学解决日常出行与校园组队的真实难题，提供一站式便捷服务。针对校区位置偏远、外出交通不便的问题，平台打造高效拼车功能，无论是前往地铁站、商圈，
+                还是节假日出行，都能快速匹配同行伙伴，大家平摊车费、省时省钱，告别独自乘车的昂贵与孤单，让外出出行更加经济、安心、高效。</p>
+        </div>
+
+        <!-- 图片展示 -->
+        <div class="image-group">
+            <div class="image-card">
+                <img src="2.jpg" alt="文理学子拼车同行">
+                <div class="card-info">一键拼车 · 出行成本轻松摊</div>
+            </div>
+            <div class="image-card">
+                <img src="3.jpg" alt="同学组队参与竞赛">
+                <div class="card-info"></div>
+            </div>
+            <div class="image-card">
+                <img src="4.jpg" alt="校园结伴日常">
+                <div class="card-info"></div>
+            </div>
+        </div>
+<!-- 文案区域 -->
+        <div class="about-text">
+            <p>同时，平台不止于拼车，更覆盖丰富的校园生活场景。无论是各类学科竞赛、创新创业比赛、文体活动，还是社团组队、学习互助、兴趣结伴，你都可以在这里快速找到志同道
+                合的队友。不用再四处打听、苦苦凑人，只需简单发布需求，就能精准对接目标伙伴，让组队不再繁琐，让每一份想法与热情都能找到同行者。</p>
+            
+        </div>
+
+        <!-- 图片展示 -->
+        <div class="image-group">
+            <div class="image-card">
+                <img src="5.jpg" alt="文理学子拼车同行">
+                <div class="card-info">轻松结伴 · 组队协作不孤单</div>
+            </div>
+            <div class="image-card">
+                <img src="6.jpg" alt="同学组队参与竞赛">
+                <div class="card-info"></div>
+            </div>
+  
+        </div>
+        
+<!-- 文案区域 -->
+        <div class="about-text">
+            <p>校园拼拼乐以服务同学为初心，用简洁便捷的操作，打通校园内的信息壁垒，把有相同需求的同学凝聚在一起。在这里，出行更划算，组队更高效，参与活动更积极，让原本麻烦的事情变得简单轻松。我们希望用小小的
+                平台，连接大大的温暖，让每一位同学都能享受便利的校园生活，在结伴同行中收获友谊、成长与精彩，让校园生活更加充实、有趣、有温度。</p>
+        </div>
+
+        <!-- 图片展示 -->
+        <div class="image-group">
+            <div class="image-card">
+                <img src="7.jpg" alt="文理学子拼车同行">
+                <div class="card-info">温暖陪伴 · 校园生活更有温度</div>
+            </div>
+            <div class="image-card">
+                <img src="8.jpg" alt="同学组队参与竞赛">
+                <div class="card-info"></div>
+            </div>
+  
+        </div>
+        <!-- 底部标语 -->
+        <div class="slogan-box">
+            少一分繁琐，多一份陪伴——校园拼拼乐，让你的校园生活更高效、更划算、更有温度
+        </div>
+    </div>
+</body>
+</html>

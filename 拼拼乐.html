@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拼拼网 · 活动搭子</title>
+    <style>
+          nav {
+            background-color: #2c3e50; /* 深蓝色背景 */
+            width: 100%; /* 占满整个宽度 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 增加阴影提升层次感 */
+        }
+
+        /* 导航链接容器，用于居中导航项 */
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto; /* 水平居中 */
+            display: flex; /* 横向排列链接 */
+        }
+
+        /* 导航链接样式 */
+        nav a {
+            color: white; /* 文字白色 */
+            text-decoration: none; /* 去掉下划线 */
+            padding: 15px 20px; /* 内边距，增加点击区域 */
+            display: inline-block; /* 让 padding 生效 */
+            transition: background-color 0.3s ease; /* 过渡效果，更丝滑 */
+        }
+
+        /* 鼠标悬停效果 */
+        nav a:hover {
+            background-color: #34495e; /* 悬停时加深背景色 */
+            color: #f1c40f; /* 文字变成浅黄色 */
+        }
+
+        /* 可选：当前页面链接的样式（比如首页） */
+        nav a.active {
+            background-color: #1abc9c;
+            color: white;
+        }
+       
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f3f5f9;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* 头部 */
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #1e2b5e, #2f3e7c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: #4a5578;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        /* 两列布局 */
+        .main-panel {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* 左侧发布卡 */
+        .publish-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 20px 35px -8px rgba(26, 35, 60, 0.15);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.2s ease;
+        }
+
+        .publish-card h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #121826;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .publish-card h2 span {
+            background: #eef2ff;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            padding: 0.2rem 1rem;
+            color: #1d4ed8;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2c3a5e;
+            margin-bottom: 0.35rem;
+            letter-spacing: 0.3px;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            background: #fafcff;
+            transition: 0.15s;
+            outline: none;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: #3b4e8c;
+            box-shadow: 0 0 0 3px rgba(59, 78, 140, 0.15);
+            background: white;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            background: #1e2b5e;
+            color: white;
+            border: none;
+            padding: 1rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 18px -6px #1e2b5e60;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background: #253b7a;
+            transform: scale(1.02);
+            box-shadow: 0 12px 22px -8px #1e2b5e;
+        }
+
+        .btn.secondary {
+            background: white;
+            color: #1e2b5e;
+            border: 2px solid #dde3ed;
+            box-shadow: none;
+            margin-top: 0.5rem;
+        }
+
+        .btn.secondary:hover {
+            background: #f0f4fe;
+            border-color: #a5b4d4;
+            transform: scale(1.01);
+        }
+
+        /* 右侧列表区 */
+        .feed-section {
+            background: transparent;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+            background: white;
+            padding: 0.6rem 0.6rem;
+            border-radius: 60px;
+            box-shadow: 0 6px 14px rgba(0,10,30,0.05);
+            width: fit-content;
+            border: 1px solid #eaedf4;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: #3c4a6b;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.95rem;
+        }
+
+        .filter-btn.active {
+            background: #1e2b5e;
+            color: white;
+            box-shadow: 0 4px 12px #b0c0e0;
+        }
+
+        .filter-btn:hover:not(.active) {
+            background: #e9eef7;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 26px;
+            padding: 1.5rem 1.3rem 1.3rem 1.3rem;
+            box-shadow: 0 12px 28px -10px rgba(25, 35, 55, 0.12);
+            transition: all 0.2s;
+            border: 1px solid #ffffff80;
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 1;
+        }
+
+        .activity-card.expired {
+            opacity: 0.7;
+            background: #f6f8fc;
+            filter: grayscale(0.2);
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: #eef2ff;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1e2b5e;
+            letter-spacing: 0.3px;
+            width: fit-content;
+            margin-bottom: 1rem;
+            border: 1px solid #cfdbf5;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 650;
+            color: #121826;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .route {
+            font-size: 1.2rem;
+            font-weight: 550;
+            margin: 0.5rem 0 0.3rem 0;
+            color: #2c3e5a;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .route span {
+            background: #f0f3fa;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #36454F;
+        }
+
+        .time-info {
+            background: #f8faff;
+            border-radius: 18px;
+            padding: 0.7rem 1rem;
+            margin: 1rem 0 0.8rem 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border: 1px dashed #aab9da;
+            color: #16325b;
+        }
+
+        .time-info .expired-tag {
+            background: #cbd5e1;
+            color: #2d3c5e;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            margin-left: auto;
+        }
+
+        .publisher {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0 0.4rem;
+            color: #2a3b5e;
+            font-weight: 500;
+        }
+
+        .contact {
+            font-size: 0.9rem;
+            background: #f1f4fb;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            width: fit-content;
+            color: #2f416b;
+        }
+
+        .extra-note {
+            margin: 0.8rem 0 0.2rem;
+            font-size: 0.95rem;
+            color: #4f5f82;
+            background: #fafbff;
+            padding: 0.6rem 0.9rem;
+            border-radius: 16px;
+            border-left: 3px solid #b1c3e8;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #b3c0d9;
+            font-size: 1.4rem;
+            cursor: pointer;
+            align-self: flex-end;
+            transition: 0.15s;
+            padding: 0 0.2rem;
+            line-height: 1;
+            margin-top: 0.5rem;
+        }
+
+        .delete-btn:hover {
+            color: #c0203a;
+            transform: scale(1.2);
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2b5ee0;
+            backdrop-filter: blur(6px);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            box-shadow: 0 12px 30px #0d1a42;
+            z-index: 1000;
+            transition: opacity 0.2s;
+            border: 1px solid #ffffff50;
+        }
+
+        .footer-note {
+            margin-top: 3rem;
+            text-align: center;
+            color: #6d7b9f;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 800px) {
+            .main-panel {
+                grid-template-columns: 1fr;
+            }
+            body { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+     
+<div class="app-container">
+    <nav>
+        <div class="nav-container">
+            <a href="登录.html" class="active">首页</a>
+            <a href="封面.html">封面</a>
+            <a href="关于我们.html">关于我们</a>
+            <a href="拼拼乐.html">拼拼乐</a>
+        </div>
+    </nav>
+    <div class="header">
+        <h1>🚀 拼拼网 · 活动搭子</h1>
+        <p>📍 发布邀请 · 真实信息 · 拼车/竞赛/组队</p>
+    </div>
+
+    <div class="main-panel">
+        <!-- 左侧发布卡片 -->
+        <div class="publish-card">
+            <h2>📢 发布邀请 <span>信息准确</span></h2>
+            <form id="publishForm">
+                <div class="form-group">
+                    <label>活动类型 *</label>
+                    <select id="activityType" required>
+                        <option value="拼车">🚗 拼车</option>
+                        <option value="学科竞赛拼人">📐 学科竞赛拼人</option>
+                        <option value="其他">🔄 其他组队</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>起点 *</label>
+                        <input type="text" id="startPoint" placeholder="例如: 武汉文理学院" required>
+                    </div>
+                    <div class="form-group">
+                        <label>终点 *</label>
+                        <input type="text" id="endPoint" placeholder="例如: 高车地铁站" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>活动时间 *</label>
+                    <input type="datetime-local" id="activityTime" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>发布人 *</label>
+                        <input type="text" id="publisher" placeholder="姓名/昵称" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系方式</label>
+                        <input type="text" id="contact" placeholder="手机/微信/QQ">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>备注 (人数/要求等)</label>
+                    <textarea id="note" rows="2" placeholder="例如: 还有2个座位 / 找数学建模队友..."></textarea>
+                </div>
+
+                <button type="button" class="btn" id="publishBtn">✨ 发布活动邀请</button>
+                <button type="button" class="btn secondary" id="clearFormBtn">清空表单</button>
+            </form>
+        </div>
+
+        <!-- 右侧活动流 -->
+        <div class="feed-section">
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">📋 全部</button>
+                <button class="filter-btn" data-filter="拼车">🚗 拼车</button>
+                <button class="filter-btn" data-filter="学科竞赛拼人">📐 学科竞赛</button>
+                <button class="filter-btn" data-filter="其他">🔄 其他</button>
+            </div>
+
+            <div id="activitiesContainer" class="activities-grid">
+                <!-- 动态渲染卡片 -->
+            </div>
+            <div class="footer-note">
+                ⏱️ 按活动时间排序 · 过期活动半透明显示
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 临时的toast容器 -->
+<div id="toast" class="toast-message" style="opacity:0; pointer-events: none;">✅ 操作成功</div>
+
+<script>
+    (function() {
+        // ---------- 数据存储 ----------
+        const STORAGE_KEY = 'pinpin_activities';
+        let activities = [];
+        let currentFilter = 'all';     // 'all', '拼车', '学科竞赛拼人', '其他'
+
+        // ---------- DOM 元素 ----------
+        const container = document.getElementById('activitiesContainer');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const publishBtn = document.getElementById('publishBtn');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const toastEl = document.getElementById('toast');
+
+        // 表单元素
+        const typeSelect = document.getElementById('activityType');
+        const startInput = document.getElementById('startPoint');
+        const endInput = document.getElementById('endPoint');
+        const timeInput = document.getElementById('activityTime');
+        const publisherInput = document.getElementById('publisher');
+        const contactInput = document.getElementById('contact');
+        const noteInput = document.getElementById('note');
+
+        // ---------- 工具函数 ----------
+        function showToast(text, duration = 2000) {
+            toastEl.style.transition = 'opacity 0.2s';
+            toastEl.style.opacity = '1';
+            toastEl.innerText = text;
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toastEl.style.opacity = '0';
+            }, duration);
+        }
+
+        // 从datetime-local字符串解析为Date对象 (本地时间)
+        function parseLocalTime(timeStr) {
+            if (!timeStr) return new Date(NaN);
+            let parts = timeStr.split(/[T:-]/);
+            if (parts.length >= 5) {
+                let year = parseInt(parts[0], 10);
+                let month = parseInt(parts[1], 10) - 1;
+                let day = parseInt(parts[2], 10);
+                let hour = parseInt(parts[3], 10);
+                let minute = parseInt(parts[4], 10);
+                return new Date(year, month, day, hour, minute);
+            }
+            return new Date(NaN);
+        }
+
+        // 格式化显示: 3月15日 14:30 (不显示年)
+        function formatDateShort(timeStr) {
+            let d = parseLocalTime(timeStr);
+            if (isNaN(d.getTime())) return timeStr || '无效时间';
+            let month = d.getMonth() + 1;
+            let day = d.getDate();
+            let hour = d.getHours().toString().padStart(2, '0');
+            let minute = d.getMinutes().toString().padStart(2, '0');
+            return `${month}月${day}日 ${hour}:${minute}`;
+        }
+
+        // 判断活动是否过期 (与当前时间比较)
+        function isExpired(timeStr) {
+            let activityDate = parseLocalTime(timeStr);
+            if (isNaN(activityDate.getTime())) return false;
+            let now = new Date();
+            return activityDate < now;
+        }
+
+        // 排序: 按活动时间升序 (最近的在前面)
+        function sortActivitiesByTime(acts) {
+            return [...acts].sort((a, b) => {
+                let timeA = parseLocalTime(a.time).getTime() || 0;
+                let timeB = parseLocalTime(b.time).getTime() || 0;
+                return timeA - timeB;
+            });
+        }
+
+        // 保存到 localStorage
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
+        }
+
+        // 加载初始数据
+        function loadFromStorage() {
+            let stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    activities = JSON.parse(stored);
+                } catch (e) {
+                    activities = [];
+                }
+            } else {
+                // 插入示例数据 (保证打开就有内容)
+                activities = [
+                    {
+                        id: Date.now() - 100000,
+                        type: '拼车',
+                        start: '武汉文理学院',
+                        end: '高车地铁站',
+                        time: '2025-03-15T14:30',
+                        publisher: '李明',
+                        contact: '138****1234',
+                        note: '还有2个座位，拼车费平摊',
+                    },
+                    {
+                        id: Date.now() - 200000,
+                        type: '学科竞赛拼人',
+                        start: '武汉文理学院图书馆',
+                        end: '数学建模赛场',
+                        time: '2025-03-20T09:00',
+                        publisher: '王芳',
+                        contact: '139****5678',
+                        note: '寻找数学建模队友，还缺2人，有基础优先',
+                    },
+                    {
+                        id: Date.now() - 150000,
+                        type: '拼车',
+                        start: '武汉文理学院',
+                        end: '汉口火车站',
+                        time: '2025-03-16T08:00',
+                        publisher: '陈晨',
+                        contact: '182****4321',
+                        note: '赶火车，还有3个空位',
+                    }
+                ];
+            }
+            // 保证每个对象都有必要字段 (防止旧数据结构)
+            activities = activities.filter(a => a && a.type && a.start && a.end && a.time);
+            saveToStorage();
+        }
+
+        // ---------- 渲染函数 ----------
+        function render() {
+            // 先根据筛选过滤
+            let filtered = activities;
+            if (currentFilter !== 'all') {
+                filtered = activities.filter(act => act.type === currentFilter);
+            }
+            // 按时间升序
+            filtered = sortActivitiesByTime(filtered);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="grid-column:1/-1; background: #f0f3fc; border-radius: 40px; padding: 3rem; text-align: center; color: #4b6589;">✨ 暂无活动，点击上方发布邀请～</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(act => {
+                const expired = isExpired(act.time);
+                const expiredClass = expired ? 'expired' : '';
+                const timeFormatted = formatDateShort(act.time);
+                const expiredTag = expired ? '<span class="expired-tag">⌛ 已过期</span>' : '';
+
+                // 处理联系方式显示
+                const contactInfo = act.contact && act.contact.trim() ? act.contact : '未提供';
+
+                html += `
+                    <div class="activity-card ${expiredClass}" data-id="${act.id}">
+                        <div class="card-badge">${act.type}</div>
+                        <div class="route">
+                            📍 ${act.start} <span>→</span> ${act.end}
+                        </div>
+                        <div class="time-info">
+                            🕒 ${timeFormatted} ${expiredTag}
+                        </div>
+                        <div class="publisher">
+                            👤 ${act.publisher || '匿名'} 
+                            <span class="contact">📞 ${contactInfo}</span>
+                        </div>
+                        ${act.note ? `<div class="extra-note">📝 ${act.note}</div>` : ''}
+                        <button class="delete-btn" title="删除这条邀请" onclick="removeActivity(${act.id})">✕</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // 全局挂载删除函数 (因为onclick属性调用)
+        window.removeActivity = function(id) {
+            if (!confirm('确定要删除这条活动邀请吗？')) return;
+            activities = activities.filter(act => act.id !== id);
+            saveToStorage();
+            render();
+            showToast('🗑️ 活动已删除');
+        };
+
+        // 发布新活动
+        function publishActivity() {
+            // 表单验证
+            let type = typeSelect.value;
+            let start = startInput.value.trim();
+            let end = endInput.value.trim();
+            let time = timeInput.value;
+            let publisher = publisherInput.value.trim();
+            let contact = contactInput.value.trim();
+            let note = noteInput.value.trim();
+
+            if (!type || !start || !end || !time || !publisher) {
+                showToast('❌ 请填写所有必填项 (*)', 2000);
+                return;
+            }
+
+            // 时间不能太离谱 (可选)
+            let newAct = {
+                id: Date.now(),
+                type: type,
+                start: start,
+                end: end,
+                time: time,
+                publisher: publisher,
+                contact: contact || '',
+                note: note || '',
+            };
+
+            activities.push(newAct);
+            saveToStorage();
+            render();
+
+            // 清空表单 (但保留类型默认)
+            startInput.value = '';
+            endInput.value = '';
+            timeInput.value = '';
+            publisherInput.value = '';
+            contactInput.value = '';
+            noteInput.value = '';
+            // 类型重置为第一个，也可以保留之前选择的，但清空后还原成默认拼车比较友好
+            typeSelect.value = '拼车';
+
+            showToast('✅ 活动发布成功！');
+        }
+
+        // 清空表单
+        function resetForm() {
+            if (confirm('清空已填写的内容？')) {
+                startInput.value = '';
+                endInput.value = '';
+                timeInput.value = '';
+                publisherInput.value = '';
+                contactInput.value = '';
+                noteInput.value = '';
+                typeSelect.value = '拼车';
+            }
+        }
+
+        // 切换filter
+        function setFilter(filter) {
+            currentFilter = filter;
+            filterBtns.forEach(btn => {
+                let btnFilter = btn.getAttribute('data-filter');
+                if (btnFilter === filter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            render();
+        }
+
+        // ---------- 事件绑定 ----------
+        publishBtn.addEventListener('click', publishActivity);
+        clearFormBtn.addEventListener('click', resetForm);
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                let filter = e.target.getAttribute('data-filter');
+                setFilter(filter);
+            });
+        });
+
+        // 初始载入
+        loadFromStorage();
+        render();
+
+        // 监听storage变化 (多标签同步，简单支持)
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY) {
+                loadFromStorage();
+                render();
+            }
+        });
+
+        // 额外：给新朋友准备焦点提示
+        console.log('拼拼网已启动 — 发布/查看/删除 活动邀请');
+    })();
+</script>
+</body>
+</html>

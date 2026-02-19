@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武汉文理学院 · 学号登录</title>
+    <!-- 干净现代的字体 & 图标库 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        nav {
+            background-color: #2c3e50;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #34495e;
+            color: #f1c40f;
+        }
+        nav a.active {
+            background-color: #1abc9c;
+            color: white;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #eef5fc 0%, #dbeafe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.03"><path fill="%231d3d6b" d="M20 20h10v60H20zM40 30h10v50H40zM60 25h10v55H60zM80 35h10v45H80z"/><circle cx="25" cy="12" r="4" fill="%231d3d6b"/><circle cx="45" cy="22" r="4" fill="%231d3d6b"/><circle cx="65" cy="17" r="4" fill="%231d3d6b"/><circle cx="85" cy="27" r="4" fill="%231d3d6b"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 520px;
+            z-index: 10;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 64px;
+            padding: 3rem 2.5rem 3.5rem;
+            box-shadow: 0 40px 60px -20px rgba(18, 45, 80, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: all 0.2s ease;
+        }
+        .univ-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .univ-icon {
+            background: #15457c;
+            background: linear-gradient(135deg, #1f4f8f, #103262);
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 0 #0b2442, 0 10px 20px rgba(0,20,50,0.3);
+        }
+        .univ-icon i {
+            font-size: 2.8rem;
+            color: #ffd966;
+            filter: drop-shadow(2px 4px 0 #b0651a);
+        }
+        .univ-title h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #112f4b;
+        }
+        .univ-title p {
+            font-weight: 600;
+            color: #26648b;
+            letter-spacing: 0.3px;
+        }
+        .input-field {
+            margin-bottom: 2rem;
+        }
+        .input-field label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1b3f60;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.6rem;
+        }
+        .input-field label i {
+            color: #e68a2e;
+            font-size: 1.2rem;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 3.2rem;
+            font-size: 1.2rem;
+            background: #ffffff;
+            border: 3px solid #c5daf2;
+            border-radius: 60px;
+            outline: none;
+            transition: all 0.15s ease;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            color: #0f2e48;
+            box-shadow: 0 6px 0 #b0c9e3, 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .input-wrapper input:focus {
+            border-color: #faa51a;
+            box-shadow: 0 6px 0 #e08d10, 0 0 0 4px #ffe1a4;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 1.4rem;
+            font-size: 1.4rem;
+            color: #26648b;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .hint-badge {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 1rem;
+            margin: 0.5rem 0 1.8rem;
+            background: #e3efff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #154d7a;
+            border: 1px solid #b6d3f5;
+        }
+        .hint-badge i {
+            color: #cc5f1c;
+        }
+        .badge-years {
+            background: #154d7a;
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .login-btn {
+            background: #1d5f9e;
+            background: linear-gradient(145deg, #2169af, #124b82);
+            width: 100%;
+            border: none;
+            border-radius: 80px;
+            padding: 1.3rem 2rem;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 18px 0 #0a3052, 0 10px 20px rgba(0, 35, 70, 0.4);
+            cursor: pointer;
+            transition: 0.08s linear;
+            margin-top: 2.2rem;
+        }
+        .login-btn:active {
+            transform: translateY(12px);
+            box-shadow: 0 6px 0 #0a3052, 0 8px 16px rgba(0, 35, 70, 0.4);
+        }
+        .login-btn i {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 2px black);
+        }
+        .validation-msg {
+            margin-top: 1.5rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 60px;
+            background: rgba(255, 245, 215, 0.7);
+            backdrop-filter: blur(4px);
+            font-size: 1rem;
+            font-weight: 600;
+            color: #274d6b;
+            border: 1px solid #f8cf8c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .validation-msg i {
+            font-size: 1.6rem;
+            color: #d68b2c;
+        }
+        .validation-msg span {
+            color: #14471c;
+            font-weight: 700;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #1c4970;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .demo-note {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #3471a1;
+        }
+    </style>
+    <script>
+        // 已登录则直接跳转到封面页
+        if (sessionStorage.getItem('loggedIn')) {
+            location.replace('封面.html');
+        }
+    </script>
+</head>
+<body>
+    
+
+    <div class="login-container">
+        <nav>
+        <div class="nav-container">
+            <a href="登录.html" class="active">首页</a>
+            <a href="封面.html">封面</a>
+            <a href="关于我们.html">关于我们</a>
+            <a href="拼拼乐.html">拼拼乐</a>
+        </div>
+    </nav>
+        <div class="login-card">
+            <div class="univ-header">
+                <div class="univ-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <div class="univ-title">
+                    <h1>武汉文理学院</h1>
+                    <p><i class="fas fa-leaf" style="color:#479f5e;"></i> 学号·姓名登录</p>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label><i class="fas fa-id-card"></i> 学号 <span style="font-weight:400; margin-left:auto; font-size:0.9rem; color:#3477a1;">12位数字</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-graduate"></i>
+                    <input type="text" id="studentId" placeholder="2024xxxxxxxx" value="202360123456" maxlength="12" inputmode="numeric">
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label><i class="fas fa-signature"></i> 姓名</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-pen"></i>
+                    <input type="text" id="studentName" placeholder="李华" value="张明轩">
+                </div>
+            </div>
+
+            <div class="hint-badge">
+                <i class="fas fa-lightbulb"></i>
+                <span>学号前四位必须在 <span class="badge-years">2021 — 2024</span> 之间</span>
+            </div>
+
+            <button class="login-btn" id="loginBtn">
+                <i class="fas fa-arrow-right-to-bracket"></i> 登 录
+            </button>
+
+            <div class="validation-msg" id="validationMessage">
+                <i class="fas fa-circle-info"></i>
+                <span id="msgText">等待验证</span>
+            </div>
+
+            <div class="demo-note">
+                <i class="fas fa-magic" style="color:#b45f1b;"></i> 示例学号: 202160123456 (2021级) · 202260123456 · 202360123456 · 202460123456
+            </div>
+        </div>
+        <div class="footer-note">
+            <i class="fas fa-shield-alt"></i> 仅限武汉文理学院在校生 · 学号验证
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const studentIdInput = document.getElementById('studentId');
+            const studentNameInput = document.getElementById('studentName');
+            const loginBtn = document.getElementById('loginBtn');
+            const msgText = document.getElementById('msgText');
+            const validationMsgDiv = document.getElementById('validationMessage');
+
+            validationMsgDiv.style.background = 'rgba(235, 245, 255, 0.8)';
+            validationMsgDiv.style.borderColor = '#b0cff0';
+
+            function validateStudentId(id) {
+                const digitRegex = /^\d{12}$/;
+                if (!digitRegex.test(id)) {
+                    return { valid: false, message: '❌ 学号必须为12位数字', year: null };
+                }
+                const prefix = id.substring(0, 4);
+                const prefixNum = parseInt(prefix, 10);
+                if (prefixNum >= 2021 && prefixNum <= 2024) {
+                    return { valid: true, message: `✅ 学号前缀 ${prefix} 符合 (${prefixNum}级)`, year: prefixNum };
+                } else {
+                    return { valid: false, message: `❌ 学号前四位 ${prefix} 不在2021-2024范围内`, year: null };
+                }
+            }
+
+            function updateValidationUI() {
+                const id = studentIdInput.value.trim();
+                const name = studentNameInput.value.trim();
+
+                if (name === '') {
+                    msgText.innerText = '⛔ 姓名不能为空';
+                    validationMsgDiv.style.background = '#fff0dd';
+                    validationMsgDiv.style.borderColor = '#f7b773';
+                    return;
+                }
+
+                const result = validateStudentId(id);
+                if (result.valid) {
+                    msgText.innerText = `${result.message} · 姓名: ${name}`;
+                    validationMsgDiv.style.background = '#e2f3e2';
+                    validationMsgDiv.style.borderColor = '#79c479';
+                } else {
+                    msgText.innerText = result.message;
+                    validationMsgDiv.style.background = '#ffe6e6';
+                    validationMsgDiv.style.borderColor = '#f09b9b';
+                }
+            }
+
+            function handleLogin() {
+                const id = studentIdInput.value.trim();
+                const name = studentNameInput.value.trim();
+
+                if (name === '') {
+                    msgText.innerText = '⛔ 姓名不能为空';
+                    validationMsgDiv.style.background = '#fff0dd';
+                    validationMsgDiv.style.borderColor = '#f7b773';
+                    alert('请填写姓名');
+                    return;
+                }
+
+                const result = validateStudentId(id);
+
+                if (result.valid) {
+                    const yearPrefix = id.substring(0,4);
+                    msgText.innerText = `🎉 登录成功！欢迎 ${name} (${yearPrefix}级)`;
+                    validationMsgDiv.style.background = '#d2f0d2';
+                    validationMsgDiv.style.borderColor = '#42a85f';
+                    
+                    // 设置登录状态并跳转到封面页
+                    sessionStorage.setItem('loggedIn', 'true');
+                    alert(`✅ 登录成功！\n学号：${id}\n姓名：${name}\n年级：${yearPrefix}级`);
+                    location.href = '封面.html';
+                } else {
+                    msgText.innerText = result.message;
+                    validationMsgDiv.style.background = '#ffe6e6';
+                    validationMsgDiv.style.borderColor = '#f09b9b';
+                    alert(`❌ 登录失败\n${result.message}`);
+                }
+            }
+
+            studentIdInput.addEventListener('input', updateValidationUI);
+            studentNameInput.addEventListener('input', updateValidationUI);
+            loginBtn.addEventListener('click', handleLogin);
+
+            window.addEventListener('load', function() {
+                updateValidationUI();
+            });
+
+            studentIdInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            studentNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+        })();
+    </script>
+</body>
+</html>
