@@ -608,14 +608,14 @@
                     <label><i class="fas fa-id-card"></i> 学号 <span style="font-weight:400; margin-left:auto; font-size:0.9rem;">12位数字</span></label>
                     <div class="input-wrapper">
                         <i class="fas fa-user-graduate"></i>
-                        <input type="text" id="studentId" placeholder="2024xxxxxxxx" value="202360123456" maxlength="12" inputmode="numeric">
+                        <input type="text" id="studentId" placeholder="2023xxxxxxxx" value="" maxlength="12" inputmode="numeric">
                     </div>
                 </div>
                 <div class="input-field">
                     <label><i class="fas fa-signature"></i> 姓名</label>
                     <div class="input-wrapper">
                         <i class="fas fa-pen"></i>
-                        <input type="text" id="studentName" placeholder="李华" value="张明轩">
+                        <input type="text" id="studentName" placeholder="" value="">
                     </div>
                 </div>
                 <div class="hint-badge">
@@ -708,6 +708,10 @@
                                 <select id="activityType" required>
                                     <option value="拼车">🚗 拼车</option>
                                     <option value="学科竞赛拼人">📐 学科竞赛拼人</option>
+                                    <option value="拼学习搭子">拼学习搭子</option>
+                                    <option value="拼活动结伴">拼活动结伴</option>
+                                    <option value="拼运动搭子">拼运动搭子</option>
+                                    <option value=" 拼春游拼团"> 拼春游拼团</option>
                                     <option value="其他">🔄 其他组队</option>
                                 </select>
                             </div>
@@ -728,8 +732,12 @@
                     <div class="feed-section">
                         <div class="filter-bar">
                             <button class="filter-btn active" data-filter="all">📋 全部</button>
-                            <button class="filter-btn" data-filter="拼车">🚗 拼车</button>
-                            <button class="filter-btn" data-filter="学科竞赛拼人">📐 学科竞赛</button>
+                            <button class="filter-btn" data-filter="拼车同行">🚗 拼车</button>
+                            <button class="filter-btn" data-filter="拼比赛组队 ">📐 学科竞赛</button>
+                             <button class="filter-btn" data-filter=" 拼学习搭子">拼学习搭子</button>
+                              <button class="filter-btn" data-filter="拼活动结伴">拼活动结伴</button>
+                               <button class="filter-btn" data-filter="拼运动搭子">拼运动搭子</button>
+                                    <button class="filter-btn" data-filter=" 拼春游拼团">拼春游拼团</button>
                             <button class="filter-btn" data-filter="其他">🔄 其他</button>
                         </div>
                         <div id="activitiesContainer" class="activities-grid"></div>
