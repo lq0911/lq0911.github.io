@@ -236,6 +236,18 @@
             font-weight: 600;
             font-size: 0.95rem;
         }
+        /* 访问次数统计样式 */
+        .visit-count {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #154d7a;
+            font-weight: 600;
+            background: #e3efff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            border: 1px solid #b6d3f5;
+        }
 
         /* ---------- 封面页面样式 (取自封面.html) ---------- */
         .cover-container {
@@ -592,6 +604,10 @@
     <!-- 登录页面板块 -->
     <div id="login-page" class="page active-page">
         <div class="login-container">
+            <!-- 新增访问次数统计 -->
+            <div class="visit-count">
+                <i class="fas fa-eye"></i> 网站总访问次数：<span id="visitCountNum">0</span>
+            </div>
             <div class="login-card">
                 <div class="univ-header">
                     <div class="univ-icon"><i class="fas fa-university"></i></div>
@@ -744,9 +760,28 @@
     <!-- 全局toast -->
     <div id="toast" class="toast-message" style="opacity:0;">✅ 操作成功</div>
 
-    <!-- 合并后的脚本：登录验证 + 拼拼乐功能 + 页面切换 + 登录守卫 -->
+    <!-- 合并后的脚本：登录验证 + 拼拼乐功能 + 页面切换 + 登录守卫 + 访问次数统计 -->
     <script>
         (function() {
+            // ========== 新增：访问次数统计功能 ==========
+            function initVisitCount() {
+                // 从localStorage获取当前访问次数，不存在则初始化为0
+                let count = localStorage.getItem('siteVisitCount');
+                count = count ? parseInt(count, 10) : 0;
+                
+                // 每次页面加载次数+1
+                count += 1;
+                
+                // 保存回localStorage
+                localStorage.setItem('siteVisitCount', count);
+                
+                // 更新页面显示
+                document.getElementById('visitCountNum').textContent = count;
+            }
+            
+            // 页面加载时初始化访问次数
+            initVisitCount();
+
             // ---------- 页面切换模块 ----------
             const pages = {
                 login: document.getElementById('login-page'),
@@ -813,7 +848,7 @@
                 if (requireLogin('pinpinle-page')) showPage('pinpinle-page');
             });
 
-            // ---------- 登录逻辑 (取自登录.html) ----------
+            // ---------- 登录逻辑 (修改学号验证范围为2021-2029) ----------
             const studentIdInput = document.getElementById('studentId');
             const studentNameInput = document.getElementById('studentName');
             const loginBtn = document.getElementById('loginBtn');
@@ -825,8 +860,9 @@
                 if (!digitRegex.test(id)) return { valid: false, message: '❌ 学号必须为12位数字' };
                 const prefix = id.substring(0, 4);
                 const prefixNum = parseInt(prefix, 10);
-                if (prefixNum >= 2021 && prefixNum <= 2024) return { valid: true, message: `✅ 学号前缀 ${prefix} 符合 (${prefixNum}级)` };
-                else return { valid: false, message: `❌ 学号前四位 ${prefix} 不在2021-2024范围内` };
+                // 修改：验证范围改为2021-2029
+                if (prefixNum >= 2021 && prefixNum <= 2029) return { valid: true, message: `✅ 学号前缀 ${prefix} 符合 (${prefixNum}级)` };
+                else return { valid: false, message: `❌ 学号前四位 ${prefix} 不在2021-2029范围内` };
             }
 
             function updateValidationUI() {
@@ -879,12 +915,10 @@
                     bindEvents();
                 }
 
-                // 加载本地存储的活动数据
+                // 从本地存储加载活动数据
                 function loadActivities() {
                     const stored = localStorage.getItem(STORAGE_KEY);
                     activities = stored ? JSON.parse(stored) : [];
-                    // 按活动时间排序（新的在前）
-                    activities.sort((a, b) => new Date(b.activityTime) - new Date(a.activityTime));
                 }
 
                 // 保存活动数据到本地存储
@@ -892,159 +926,113 @@
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
                 }
 
-                // 自动删除过期活动
+                // 移除过期活动
                 function removeExpiredActivities() {
-                    const currentTime = new Date();
-                    // 过滤出未过期的活动（活动时间 >= 当前时间）
-                    const validActivities = activities.filter(activity => {
-                        return new Date(activity.activityTime) >= currentTime;
+                    const now = new Date().getTime();
+                    activities = activities.filter(activity => {
+                        const activityTime = new Date(activity.time).getTime();
+                        // 保留未来的活动（过期超过24小时的删除）
+                        return activityTime > now - 24 * 60 * 60 * 1000;
                     });
-                    // 计算删除的数量，有过期活动则提示并更新存储
-                    const deletedCount = activities.length - validActivities.length;
-                    if (deletedCount > 0) {
-                        activities = validActivities;
-                        saveActivities();
-                        showToast(`🗑️ 自动清理了 ${deletedCount} 个过期活动`);
-                    }
+                    saveActivities();
                 }
 
                 // 渲染活动列表
-                function renderActivities(filterType = 'all') {
-                    // 渲染前先清理过期活动
-                    removeExpiredActivities();
-                    
+                function renderActivities(filter = 'all') {
                     const container = document.getElementById('activitiesContainer');
                     container.innerHTML = '';
 
-                    // 过滤要显示的活动：all显示全部，否则匹配活动类型
-                    const filteredActivities = filterType === 'all' 
+                    // 过滤活动
+                    const filteredActivities = filter === 'all' 
                         ? activities 
-                        : activities.filter(activity => activity.activityType === filterType);
+                        : activities.filter(activity => activity.type === filter);
 
                     if (filteredActivities.length === 0) {
-                        container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:3rem; color:#666;">
-                            📭 暂无${filterType === 'all' ? '活动' : filterType}类型的活动，快来发布吧！
-                        </div>`;
+                        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #666;">暂无相关活动</div>';
                         return;
                     }
 
-                    // 遍历渲染过滤后的活动卡片
+                    // 按时间排序（最新的在前）
+                    filteredActivities.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+                    // 创建活动卡片
                     filteredActivities.forEach((activity, index) => {
                         const card = document.createElement('div');
-                        card.className = `activity-card`;
+                        card.className = 'activity-card';
                         card.innerHTML = `
-                            <span class="card-badge">${activity.activityType}</span>
-                            <div class="route">${activity.startPoint} → ${activity.endPoint}</div>
+                            <span class="card-badge">${activity.type}</span>
+                            <div class="route">${activity.start} → ${activity.end}</div>
                             <div class="time-info">
-                                <i class="far fa-clock"></i> ${formatDateTime(activity.activityTime)}
+                                <i class="far fa-clock"></i> ${formatTime(activity.time)}
                             </div>
-                            <div style="margin:0.8rem 0; color:#555;">
-                                <i class="far fa-user"></i> 发布人：${activity.publisher}
-                            </div>
-                            ${activity.contact ? `<div style="color:#555; margin-bottom:0.8rem;">
-                                <i class="far fa-phone"></i> 联系方式：${activity.contact}
-                            </div>` : ''}
-                            ${activity.note ? `<div style="background:#f5f8ff; padding:0.6rem 1rem; border-radius:12px; margin:0.8rem 0; font-size:0.9rem; color:#333;">
-                                <i class="far fa-sticky-note"></i> ${activity.note}
-                            </div>` : ''}
-                            <button class="delete-btn" data-index="${index}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <div><strong>发布人：</strong>${activity.publisher}</div>
+                            ${activity.contact ? `<div><strong>联系方式：</strong>${activity.contact}</div>` : ''}
+                            ${activity.note ? `<div style="margin-top: 0.5rem;"><strong>备注：</strong>${activity.note}</div>` : ''}
+                            <button class="delete-btn" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
                         `;
                         container.appendChild(card);
                     });
-                }
 
-                // 格式化日期时间显示
-                function formatDateTime(datetimeStr) {
-                    const date = new Date(datetimeStr);
-                    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
-                            ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-                }
-
-                // 绑定所有事件
-                function bindEvents() {
-                    // 发布活动按钮
-                    document.getElementById('publishBtn').addEventListener('click', publishActivity);
-                    // 清空表单按钮
-                    document.getElementById('clearFormBtn').addEventListener('click', clearForm);
-                    // 筛选按钮组
-                    const filterBtns = document.querySelectorAll('.filter-btn');
-                    filterBtns.forEach(btn => {
+                    // 绑定删除按钮事件
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
                         btn.addEventListener('click', function() {
-                            // 切换筛选按钮激活状态
-                            filterBtns.forEach(b => b.classList.remove('active'));
-                            this.classList.add('active');
-                            // 渲染对应类型的活动
-                            renderActivities(this.dataset.filter);
+                            const index = parseInt(this.getAttribute('data-index'));
+                            deleteActivity(index);
                         });
                     });
-                    // 删除按钮（委托事件）
-                    document.getElementById('activitiesContainer').addEventListener('click', function(e) {
-                        if (e.target.closest('.delete-btn')) {
-                            const index = e.target.closest('.delete-btn').dataset.index;
-                            if (confirm('确定删除该活动吗？')) {
-                                activities.splice(index, 1);
-                                saveActivities();
-                                // 重新渲染当前筛选的活动
-                                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
-                                renderActivities(activeFilter);
-                                showToast('🗑️ 活动已删除');
-                            }
-                        }
+                }
+
+                // 格式化时间显示
+                function formatTime(timeStr) {
+                    const date = new Date(timeStr);
+                    return date.toLocaleString('zh-CN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
                     });
                 }
 
-                // 发布活动逻辑
-                function publishActivity() {
-                    const activityType = document.getElementById('activityType').value;
-                    const startPoint = document.getElementById('startPoint').value.trim();
-                    const endPoint = document.getElementById('endPoint').value.trim();
-                    const activityTime = document.getElementById('activityTime').value;
-                    const publisher = document.getElementById('publisher').value.trim();
-                    const contact = document.getElementById('contact').value.trim();
-                    const note = document.getElementById('note').value.trim();
-
-                    // 表单验证
-                    if (!startPoint || !endPoint || !activityTime || !publisher) {
-                        showToast('⚠️ 带*的字段不能为空！');
-                        return;
+                // 删除活动
+                function deleteActivity(index) {
+                    if (confirm('确定删除该活动吗？')) {
+                        activities.splice(index, 1);
+                        saveActivities();
+                        renderActivities(document.querySelector('.filter-btn.active').dataset.filter);
+                        showToast('活动已删除');
                     }
-
-                    // 检查活动时间是否已过期
-                    const activityDateTime = new Date(activityTime);
-                    const currentTime = new Date();
-                    if (activityDateTime < currentTime) {
-                        showToast('⚠️ 活动时间不能早于当前时间！');
-                        return;
-                    }
-
-                    // 构造活动对象
-                    const newActivity = {
-                        activityType,
-                        startPoint,
-                        endPoint,
-                        activityTime,
-                        publisher,
-                        contact,
-                        note
-                    };
-
-                    // 发布前先清理过期活动，再添加新活动
-                    removeExpiredActivities();
-                    activities.unshift(newActivity); // 新增活动放最前面
-                    saveActivities();
-                    renderActivities(document.querySelector('.filter-btn.active').dataset.filter);
-                    clearForm(); // 清空表单
-                    showToast('✅ 活动发布成功！');
                 }
 
-                // 清空表单
-                function clearForm() {
+                // 发布活动
+                function publishActivity(e) {
+                    e.preventDefault();
+
+                    const activity = {
+                        type: document.getElementById('activityType').value,
+                        start: document.getElementById('startPoint').value.trim(),
+                        end: document.getElementById('endPoint').value.trim(),
+                        time: document.getElementById('activityTime').value,
+                        publisher: document.getElementById('publisher').value.trim(),
+                        contact: document.getElementById('contact').value.trim(),
+                        note: document.getElementById('note').value.trim()
+                    };
+
+                    // 简单验证
+                    if (!activity.start || !activity.end || !activity.time || !activity.publisher) {
+                        alert('请填写必填字段（*标记）');
+                        return;
+                    }
+
+                    // 添加到活动列表
+                    activities.unshift(activity);
+                    saveActivities();
+                    renderActivities(document.querySelector('.filter-btn.active').dataset.filter);
+                    showToast('活动发布成功');
                     document.getElementById('publishForm').reset();
                 }
 
-                // 显示提示弹窗
+                // 显示提示消息
                 function showToast(message) {
                     const toast = document.getElementById('toast');
                     toast.textContent = message;
@@ -1052,6 +1040,24 @@
                     setTimeout(() => {
                         toast.style.opacity = '0';
                     }, 2000);
+                }
+
+                // 绑定表单事件
+                function bindEvents() {
+                    // 发布按钮
+                    document.getElementById('publishBtn').addEventListener('click', publishActivity);
+                    // 清空表单按钮
+                    document.getElementById('clearFormBtn').addEventListener('click', () => {
+                        document.getElementById('publishForm').reset();
+                    });
+                    // 筛选按钮
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                            this.classList.add('active');
+                            renderActivities(this.dataset.filter);
+                        });
+                    });
                 }
 
                 // 初始化拼拼乐功能
